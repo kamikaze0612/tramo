@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.country .active {
+  @apply bg-orange-400;
+}
+
+.hero-img {
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.6)
+    ),
+    url(./assets/hero-img.png);
+  background-size: cover;
+  background-position: center;
+}
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid;
+  border-color: #000 #0000;
+  animation: s1 1s infinite;
+}
+
+@keyframes s1 {
+  to {
+    transform: rotate(0.5turn);
+  }
+}
+
+.leaflet-popup-content-wrapper {
+  @apply w-[160px] bg-orange-100;
+}
+
+.leaflet-popup-tip {
+  @apply bg-orange-100;
+}
+
+.leaflet-popup-content,
+a.leaflet-popup-close-button {
+  @apply text-base font-bold text-stone-800;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply mt-[-4px] rounded-md border-l-4 border-orange-600;
+}
+
+.leaflet-popup-tip-container {
+  @apply w-8 lg:w-10;
+}
