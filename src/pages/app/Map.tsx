@@ -16,7 +16,12 @@ import Error from "../../ui/Error";
 
 function Map() {
   const [mapPosition, setMapPosition] = useState<[number, number]>([40, 100]);
-  const { position, getPosition, error, isLoading } = useGeolocation();
+  const {
+    position,
+    getPosition,
+    error,
+    isLoading: geoLocationIsLoading,
+  } = useGeolocation();
   const { lat: mapLat, lng: mapLng } = useUrlPosition();
   const { cities } = useCities();
 
@@ -41,7 +46,7 @@ function Map() {
               onClick={handleGoToUserLocation}
               className="absolute bottom-[6vh] left-1/2 z-50 rounded-lg bg-orange-500 px-4 py-2 text-sm font-bold uppercase text-white lg:text-lg"
             >
-              {!isLoading ? "Go to your location" : "Loading..."}
+              {!geoLocationIsLoading ? "Go to your location" : "Loading..."}
             </button>
           ) : (
             <Error error={error} />
@@ -60,7 +65,7 @@ function Map() {
             return (
               <Marker
                 position={[+city.position.lat, +city.position.lng]}
-                key={city.id}
+                key={city.cityId}
               >
                 <Popup className="text-lg">
                   {city.emoji} {city.cityName}

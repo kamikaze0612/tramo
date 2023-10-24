@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-refresh/only-export-components */
 import {
   ReactNode,
@@ -8,8 +9,12 @@ import {
   useReducer,
   useState,
 } from "react";
-
-const BASE_URL = "http://localhost:8000";
+import {
+  addCity,
+  getCities,
+  removeCity,
+  selectCity,
+} from "../services/apiCities";
 
 enum CitiesActionKind {
   LOADING = "LOADING",
@@ -20,7 +25,7 @@ enum CitiesActionKind {
 }
 
 export type CityType = {
-  id: string;
+  cityId: string;
   cityName: string;
   countryName: string;
   notes: string;
@@ -87,7 +92,9 @@ function reducer(state: StateType, action: ActionType): StateType {
     case CitiesActionKind.CITY_REMOVE:
       return {
         ...state,
-        cities: state.cities.filter((city: CityType) => city.id !== payload),
+        cities: state.cities.filter(
+          (city: CityType) => city.cityId !== payload,
+        ),
         isLoading: false,
       };
 
@@ -122,8 +129,7 @@ function CitiesContextProvider({ children }: CitiesContextProviderProps) {
     async function fetchCities() {
       dispatch({ type: CitiesActionKind.LOADING, payload: null });
       try {
-        const res = await fetch(`${BASE_URL}/cities`);
-        const data = await res.json();
+        const data = await getCities();
 
         dispatch({ type: CitiesActionKind.CITIES_LOADED, payload: data });
       } catch (err: unknown) {
@@ -138,10 +144,13 @@ function CitiesContextProvider({ children }: CitiesContextProviderProps) {
   const getCity = useCallback(async function (id: string): Promise<void> {
     dispatch({ type: CitiesActionKind.LOADING, payload: null });
     try {
-      const res = await fetch(`${BASE_URL}/cities/${id}`);
-      const data = await res.json();
+      const data = await selectCity(id);
+      console.log(data);
 
-      dispatch({ type: CitiesActionKind.CITY_LOADED, payload: data });
+      dispatch({
+        type: CitiesActionKind.CITY_LOADED,
+        payload: data as unknown as CityType,
+      });
     } catch (err) {
       setError("Can't fetch the city💥");
       throw new Error("Can't fetch the city");
@@ -152,16 +161,13 @@ function CitiesContextProvider({ children }: CitiesContextProviderProps) {
     dispatch({ type: CitiesActionKind.LOADING, payload: null });
 
     try {
-      const res = await fetch(`${BASE_URL}/cities`, {
-        method: "POST",
-        body: JSON.stringify(newCity),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
+      const data = await addCity(newCity);
+      console.log(data);
 
-      dispatch({ type: CitiesActionKind.CITY_CREATED, payload: data });
+      dispatch({
+        type: CitiesActionKind.CITY_CREATED,
+        payload: data[0] as unknown as CityType,
+      });
     } catch {
       setError("There was an error creating the city...");
     }
@@ -171,9 +177,7 @@ function CitiesContextProvider({ children }: CitiesContextProviderProps) {
     dispatch({ type: CitiesActionKind.LOADING, payload: null });
 
     try {
-      await fetch(`${BASE_URL}/cities/${id}`, {
-        method: "DELETE",
-      });
+      const data = await removeCity(id);
 
       dispatch({ type: CitiesActionKind.CITY_REMOVE, payload: id });
     } catch (err) {

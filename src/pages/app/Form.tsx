@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { v4 as uuidV4 } from "uuid";
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { CityType, useCities } from "../../contexts/CitiesContext";
 import { convertToEmoji } from "../../utils/helpers";
 import Loader from "../../ui/Loader";
 import Error from "../../ui/Error";
+import { v4 } from "uuid";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -72,7 +72,7 @@ function Form() {
         lat,
         lng,
       },
-      id: uuidV4(),
+      cityId: v4(),
     };
 
     createCity(newCity);

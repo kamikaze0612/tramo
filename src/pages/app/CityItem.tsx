@@ -13,7 +13,9 @@ function CityItem({ city }: CityItemProps) {
   return (
     <li
       onClick={() =>
-        navigate(`${city.id}?lat=${city.position.lat}&lng=${city.position.lng}`)
+        navigate(
+          `${city.cityId}?lat=${city.position.lat}&lng=${city.position.lng}`,
+        )
       }
       className="flex h-16 cursor-pointer items-center justify-between rounded-md border-l-4 border-orange-500 bg-orange-100 px-4 py-2 lg:h-20"
     >
@@ -31,7 +33,7 @@ function CityItem({ city }: CityItemProps) {
       <button
         onClick={(e) => {
           e.stopPropagation();
-          deleteCity(city.id);
+          deleteCity(city.cityId);
         }}
         className="p-2 text-base text-red-500 hover:text-red-700 md:text-lg lg:text-xl"
       >
