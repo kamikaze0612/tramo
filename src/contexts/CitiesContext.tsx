@@ -178,6 +178,7 @@ function CitiesContextProvider({ children }: CitiesContextProviderProps) {
 
     try {
       const data = await removeCity(id);
+      console.log(data);
 
       dispatch({ type: CitiesActionKind.CITY_REMOVE, payload: id });
     } catch (err) {
